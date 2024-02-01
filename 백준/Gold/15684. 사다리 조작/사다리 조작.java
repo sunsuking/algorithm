@@ -50,7 +50,6 @@ public class Main {
             int i;
             for (i = 0; i < end; i++) {
                 int[] add = available[array[i]];
-                if (main[add[0]][add[1]] != 0 || main[add[0]][add[1] + 1] != 0) break;
                 main[add[0]][add[1]] = 1;
                 main[add[0]][add[1] + 1] = -1;
             }
@@ -70,6 +69,14 @@ public class Main {
             array[index] = i;
             combination(index + 1, i + 1, end);
         }
+    }
+
+    private static int[][] deepcopy(int[][] array) {
+        int[][] newArray = new int[array.length][array[0].length];
+        for (int i = 0; i < array.length; i++) {
+            System.arraycopy(array[i], 0, newArray[i], 0, array[0].length);
+        }
+        return newArray;
     }
 
     private static boolean isOk(int[][] map) {
