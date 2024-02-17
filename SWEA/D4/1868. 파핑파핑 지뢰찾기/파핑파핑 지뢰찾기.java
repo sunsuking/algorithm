@@ -6,7 +6,9 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.Queue;
 
-
+// 0 X X
+// X X X
+// X X X
 public class Solution {
     private static int[][] direction = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
 
@@ -33,7 +35,10 @@ public class Solution {
                             for (int[] ints : direction) {
                                 int newX = pop[0] + ints[0];
                                 int newY = pop[1] + ints[1];
-                                if (isIn(newX, newY, n) && squares[newX][newY] == '*') count++;
+                                if (isIn(newX, newY, n) && squares[newX][newY] == '*') {
+                                    visited[newX][newY] = true;
+                                    count++;
+                                }
                             }
                             if (count == 0) {
                                 isZero = true;
@@ -43,7 +48,7 @@ public class Solution {
                                     int newY = pop[1] + ints[1];
                                     if (isIn(newX, newY, n) && squares[newX][newY] == '.') {
                                         squares[newX][newY] = 'X';
-                                        visited[newX][newY] = true;
+
                                         queue.offer(new int[]{newX, newY});
                                     }
                                 }
