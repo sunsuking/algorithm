@@ -21,44 +21,42 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
         nums = new int[N + 1];
-        List<Integer> temp = new ArrayList<>();
         for (int i = 1; i <= N; i++) {
             nums[i] = 1;
-            temp.add(i);
         }
-        Map<Integer, N2252Node> map = new HashMap<>();
+        N2252Node[] nodes = new N2252Node[N + 1];
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
             int n = Integer.parseInt(st.nextToken());
             int k = Integer.parseInt(st.nextToken());
             N2252Node node;
-            if (map.containsKey(n)) {
-                node = map.get(n);
-            } else {
-                node = new N2252Node(n);
-                map.put(n, node);
+            if (nodes[n] == null) {
+                nodes[n] = new N2252Node(n);
             }
-            if (!map.containsKey(k)) {
-                map.put(k, new N2252Node(k));
+            if (nodes[k] == null) {
+                nodes[k] = new N2252Node(k);
             }
-            node.nums.add(k);
-            nums[k]++;
-            temp.remove(new Integer(n));
-            temp.remove(new Integer(k));
-        }
 
-        StringBuilder builder = new StringBuilder();
-        for (int n : temp) {
-            nums[n] = 0;
+            nodes[n].nums.add(k);
+            nums[k]++;
+
         }
+        StringBuilder end = new StringBuilder();
+        for (int i = 1; i <= N; i++) {
+            if (nodes[i] == null) {
+                end.append(i).append(" ");
+                nums[i] = 0;
+            }
+        }
+        StringBuilder builder = new StringBuilder();
 
         while (!isZero()) {
             Queue<N2252Node> queue = new LinkedList<>();
             for (int i = 1; i <= N; i++) {
-                if (nums[i] == 1 && map.containsKey(i)) {
+                if (nums[i] == 1) {
                     nums[i] = 0;
                     builder.append(i).append(" ");
-                    queue.offer(map.get(i));
+                    queue.offer(nodes[i]);
                 }
             }
 
@@ -71,9 +69,7 @@ public class Main {
                 }
             }
         }
-        for (int n : temp) {
-            builder.append(n).append(" ");
-        }
+        builder.append(end);
         System.out.println(builder);
     }
 
