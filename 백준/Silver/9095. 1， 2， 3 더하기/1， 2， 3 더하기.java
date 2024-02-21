@@ -1,45 +1,23 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Main {
-    private static Set<String> nums;
-
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int T = Integer.parseInt(br.readLine());
-        int[] count = new int[11];
-        for (int i = 1; i <= 10; i++) {
-            nums = new HashSet<>();
-            makeNums(i, "");
-//            System.out.println(nums);
-            count[i] = nums.size();
+        int[] nums = new int[11];
+        nums[1] = 1;
+        nums[2] = 2;
+        nums[3] = 4;
+        for (int i = 4; i <= 10; i++) {
+            nums[i] = nums[i - 1] + nums[i - 2] + nums[i - 3];
         }
 
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int num = Integer.parseInt(br.readLine());
         StringBuilder builder = new StringBuilder();
-        for (int testCase = 0; testCase < T; testCase++) {
-            int n = Integer.parseInt(br.readLine());
-            builder.append(count[n]).append("\n");
+        for (int i = 0; i < num; i++) {
+            builder.append(nums[Integer.parseInt(br.readLine())]).append("\n");
         }
         System.out.print(builder);
-    }
-
-    private static void makeNums(int remain, String num) {
-        if (remain < 0) return;
-        if (remain == 0) {
-            nums.add(num);
-        }
-
-        if (remain >= 1) {
-            makeNums(remain - 1, num + "1+");
-        }
-        if (remain >= 2) {
-            makeNums(remain - 2, num + "2+");
-        }
-        if (remain >= 3) {
-            makeNums(remain - 3, num + "3+");
-        }
     }
 }
