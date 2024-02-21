@@ -19,12 +19,16 @@ class N15683Position {
 }
 
 public class Main {
+    private static final int[] UP = {-1, 0};
+    private static final int[] DOWN = {1, 0};
+    private static final int[] LEFT = {0, -1};
+    private static final int[] RIGHT = {0, 1};
     private static final int[][][][] direction = {
-            {{{-1, 0}}, {{1, 0}}, {{0, 1}}, {{0, -1}}},
-            {{{-1, 0}, {1, 0}}, {{0, 1}, {0, -1}}},
-            {{{-1, 0}, {0, 1}}, {{0, 1}, {1, 0}}, {{1, 0}, {0, -1}}, {{0, -1}, {-1, 0}}},
-            {{{0, -1}, {-1, 0}, {0, 1}}, {{-1, 0}, {0, 1}, {1, 0}}, {{0, 1}, {1, 0}, {0, -1}}, {{1, 0}, {0, -1}, {-1, 0}}},
-            {{{0, 1}, {0, -1}, {1, 0}, {-1, 0}}}
+            {{UP}, {DOWN}, {LEFT}, {RIGHT}},
+            {{UP, DOWN}, {LEFT, RIGHT}},
+            {{UP, RIGHT}, {RIGHT, DOWN}, {DOWN, LEFT}, {LEFT, UP}},
+            {{LEFT, UP, RIGHT}, {UP, RIGHT, DOWN}, {RIGHT, DOWN, LEFT}, {DOWN, LEFT, UP}},
+            {{UP, RIGHT, DOWN, LEFT}}
     };
     private static List<N15683Position> array;
     private static int N, M, min;
