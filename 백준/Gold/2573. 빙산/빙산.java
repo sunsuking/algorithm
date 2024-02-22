@@ -54,7 +54,6 @@ public class Main {
             }
 
             ices = newIces;
-//            for (int i = 0; i < ices.size(); i++) System.out.println(Arrays.toString(ices.get(i)));
             day++;
             boolean[][] visited = new boolean[col][row];
 
@@ -62,6 +61,10 @@ public class Main {
             for (int[] position : ices) {
                 if (visited[position[0]][position[1]]) continue;
                 count++;
+                if (count > 1) {
+                    System.out.println(day);
+                    System.exit(0);
+                }
                 Queue<int[]> queue = new LinkedList<>();
                 queue.offer(position);
                 while (!queue.isEmpty()) {
@@ -78,14 +81,8 @@ public class Main {
                 }
             }
 
-//            for(int i = 0; i < col; i++) System.out.println(Arrays.toString(squares[i]));
-//            System.out.println("========================");
-
             if (count == 0) {
                 break;
-            } else if (count > 1) {
-                System.out.println(day);
-                System.exit(0);
             }
         }
         System.out.println(0);
