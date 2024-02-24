@@ -50,12 +50,12 @@ public class Main {
                     break;
             }
             int isSame = equals(squares, clone);
-//            System.out.println("----------start----------");
+//            System.out.println("------------------");
 //            System.out.println(s + command);
 //            for (int i = 0; i < N; i++) System.out.println(Arrays.toString(squares[i]));
-//            System.out.println("--------------------");
+//            System.out.println("------------------");
 //            for (int i = 0; i < N; i++) System.out.println(Arrays.toString(clone[i]));
-//            System.out.println("---------end-----------");
+//            System.out.println("------------------");
             if (isSame != -1) {
                 max = Math.max(max, isSame);
             } else {
@@ -66,25 +66,15 @@ public class Main {
 
     private static int[][] doLeft(int[][] squares) {
         for (int x = 0; x < N; x++) {
-            int startY = 0;
-            while (startY < N - 1) {
-                if (squares[x][startY] != 0) {
-                    startY++;
-                    continue;
-                }
-                int swapIndex = startY;
+            for (int y = 0; y < N - 1; y++) {
+                int swapIndex = y + 1;
                 while (swapIndex < N - 1 && squares[x][swapIndex] == 0) swapIndex++;
-                squares[x][startY] = squares[x][swapIndex];
-                squares[x][swapIndex] = 0;
-                startY++;
-            }
-            for (int y = 1; y < N; y++) {
-                if (squares[x][y - 1] == squares[x][y]) {
-                    squares[x][y - 1] *= 2;
-                    squares[x][y] = 0;
+                if (squares[x][y] == squares[x][swapIndex]) {
+                    squares[x][y] *= 2;
+                    squares[x][swapIndex] = 0;
                 }
             }
-            startY = 0;
+            int startY = 0;
             while (startY < N - 1) {
                 if (squares[x][startY] != 0) {
                     startY++;
@@ -102,25 +92,15 @@ public class Main {
 
     private static int[][] doRight(int[][] squares) {
         for (int x = 0; x < N; x++) {
-            int startY = N - 1;
-            while (startY > 0) {
-                if (squares[x][startY] != 0) {
-                    startY--;
-                    continue;
-                }
-                int swapIndex = startY;
+            for (int y = N - 1; y > 0; y--) {
+                int swapIndex = y - 1;
                 while (swapIndex > 0 && squares[x][swapIndex] == 0) swapIndex--;
-                squares[x][startY] = squares[x][swapIndex];
-                squares[x][swapIndex] = 0;
-                startY--;
-            }
-            for (int y = N - 2; y >= 0; y--) {
-                if (squares[x][y + 1] == squares[x][y]) {
-                    squares[x][y + 1] *= 2;
-                    squares[x][y] = 0;
+                if (squares[x][y] == squares[x][swapIndex]) {
+                    squares[x][y] *= 2;
+                    squares[x][swapIndex] = 0;
                 }
             }
-            startY = N - 1;
+            int startY = N - 1;
             while (startY > 0) {
                 if (squares[x][startY] != 0) {
                     startY--;
@@ -138,25 +118,15 @@ public class Main {
 
     private static void doUp(int[][] squares) {
         for (int y = 0; y < N; y++) {
-            int startX = 0;
-            while (startX < N - 1) {
-                if (squares[startX][y] != 0) {
-                    startX++;
-                    continue;
-                }
-                int swapIndex = startX;
+            for (int x = 0; x < N - 1; x++) {
+                int swapIndex = x + 1;
                 while (swapIndex < N - 1 && squares[swapIndex][y] == 0) swapIndex++;
-                squares[startX][y] = squares[swapIndex][y];
-                squares[swapIndex][y] = 0;
-                startX++;
-            }
-            for (int x = 1; x < N; x++) {
-                if (squares[x - 1][y] == squares[x][y]) {
-                    squares[x - 1][y] *= 2;
-                    squares[x][y] = 0;
+                if (squares[x][y] == squares[swapIndex][y]) {
+                    squares[x][y] *= 2;
+                    squares[swapIndex][y] = 0;
                 }
             }
-            startX = 0;
+            int startX = 0;
             while (startX < N - 1) {
                 if (squares[startX][y] != 0) {
                     startX++;
@@ -175,25 +145,15 @@ public class Main {
 
     private static int[][] doDown(int[][] squares) {
         for (int y = 0; y < N; y++) {
-            int startX = N - 1;
-            while (startX > 0) {
-                if (squares[startX][y] != 0) {
-                    startX--;
-                    continue;
-                }
-                int swapIndex = startX;
+            for (int x = N - 1; x > 0; x--) {
+                int swapIndex = x - 1;
                 while (swapIndex > 0 && squares[swapIndex][y] == 0) swapIndex--;
-                squares[startX][y] = squares[swapIndex][y];
-                squares[swapIndex][y] = 0;
-                startX--;
-            }
-            for (int x = N - 2; x >= 0; x--) {
-                if (squares[x + 1][y] == squares[x][y]) {
-                    squares[x + 1][y] *= 2;
-                    squares[x][y] = 0;
+                if (squares[x][y] == squares[swapIndex][y]) {
+                    squares[x][y] *= 2;
+                    squares[swapIndex][y] = 0;
                 }
             }
-            startX = N - 1;
+            int startX = N - 1;
             while (startX > 0) {
                 if (squares[startX][y] != 0) {
                     startX--;
