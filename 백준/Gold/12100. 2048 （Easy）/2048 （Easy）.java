@@ -19,11 +19,11 @@ public class Main {
                 squares[x][y] = Integer.parseInt(st.nextToken());
             }
         }
-        dfs(squares, 0, "");
+        dfs(squares, 0);
         System.out.println(max);
     }
 
-    private static void dfs(int[][] squares, int count, String s) {
+    private static void dfs(int[][] squares, int count) {
         if (count == 5) {
             for (int x = 0; x < N; x++) {
                 for (int y = 0; y < N; y++) {
@@ -49,22 +49,20 @@ public class Main {
                     doDown(clone);
                     break;
             }
-            int isSame = equals(squares, clone);
-//            System.out.println("------------------");
-//            System.out.println(s + command);
-//            for (int i = 0; i < N; i++) System.out.println(Arrays.toString(squares[i]));
-//            System.out.println("------------------");
-//            for (int i = 0; i < N; i++) System.out.println(Arrays.toString(clone[i]));
-//            System.out.println("------------------");
-            if (isSame != -1) {
-                max = Math.max(max, isSame);
-            } else {
-                dfs(clone, count + 1, s + command);
-            }
+            dfs(clone, count + 1);
+//            int isSame = equals(squares, clone);
+//            if (isSame != -1) {
+//                max = Math.max(max, isSame);
+//            } else {
+//                if (isSum) {
+//                    dfs(clone, count + 1);
+//                }
+//            }
         }
     }
 
-    private static int[][] doLeft(int[][] squares) {
+    private static boolean doLeft(int[][] squares) {
+        boolean isSum = false;
         for (int x = 0; x < N; x++) {
             for (int y = 0; y < N - 1; y++) {
                 int swapIndex = y + 1;
@@ -72,6 +70,7 @@ public class Main {
                 if (squares[x][y] == squares[x][swapIndex]) {
                     squares[x][y] *= 2;
                     squares[x][swapIndex] = 0;
+                    isSum = true;
                 }
             }
             int startY = 0;
@@ -87,10 +86,11 @@ public class Main {
                 startY++;
             }
         }
-        return squares;
+        return isSum;
     }
 
-    private static int[][] doRight(int[][] squares) {
+    private static boolean doRight(int[][] squares) {
+        boolean isSum = false;
         for (int x = 0; x < N; x++) {
             for (int y = N - 1; y > 0; y--) {
                 int swapIndex = y - 1;
@@ -98,6 +98,7 @@ public class Main {
                 if (squares[x][y] == squares[x][swapIndex]) {
                     squares[x][y] *= 2;
                     squares[x][swapIndex] = 0;
+                    isSum = true;
                 }
             }
             int startY = N - 1;
@@ -113,10 +114,11 @@ public class Main {
                 startY--;
             }
         }
-        return squares;
+        return isSum;
     }
 
-    private static void doUp(int[][] squares) {
+    private static boolean doUp(int[][] squares) {
+        boolean isSum = false;
         for (int y = 0; y < N; y++) {
             for (int x = 0; x < N - 1; x++) {
                 int swapIndex = x + 1;
@@ -124,6 +126,7 @@ public class Main {
                 if (squares[x][y] == squares[swapIndex][y]) {
                     squares[x][y] *= 2;
                     squares[swapIndex][y] = 0;
+                    isSum = true;
                 }
             }
             int startX = 0;
@@ -139,11 +142,11 @@ public class Main {
                 startX++;
             }
         }
-//        for (int i = 0; i < N; i++) System.out.println(Arrays.toString(squares[i]));
-//        System.exit(0);
+        return isSum;
     }
 
-    private static int[][] doDown(int[][] squares) {
+    private static boolean doDown(int[][] squares) {
+        boolean isSum = false;
         for (int y = 0; y < N; y++) {
             for (int x = N - 1; x > 0; x--) {
                 int swapIndex = x - 1;
@@ -151,6 +154,7 @@ public class Main {
                 if (squares[x][y] == squares[swapIndex][y]) {
                     squares[x][y] *= 2;
                     squares[swapIndex][y] = 0;
+                    isSum = true;
                 }
             }
             int startX = N - 1;
@@ -166,7 +170,7 @@ public class Main {
                 startX--;
             }
         }
-        return squares;
+        return isSum;
     }
 
     private static int equals(int[][] before, int[][] after) {
