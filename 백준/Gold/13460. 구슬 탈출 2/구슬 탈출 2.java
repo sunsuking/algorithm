@@ -1,0 +1,223 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+    private static final int UP = 0;
+    private static final int DOWN = 1;
+    private static final int LEFT = 2;
+    private static final int RIGHT = 3;
+    private static final int[][] direction = {{UP, -1, 0}, {DOWN, 1, 0}, {LEFT, 0, -1}, {RIGHT, 0, 1}};
+    private static int row, col, holeX, holeY;
+    private static char[][] squares;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        row = Integer.parseInt(st.nextToken());
+        col = Integer.parseInt(st.nextToken());
+        squares = new char[row][col];
+        int redX = 0, redY = 0, blueX = 0, blueY = 0;
+        for (int x = 0; x < row; x++) {
+            char[] chars = br.readLine().toCharArray();
+            for (int y = 0; y < col; y++) {
+                squares[x][y] = chars[y];
+                if (squares[x][y] == 'O') {
+                    holeX = x;
+                    holeY = y;
+                } else if (squares[x][y] == 'R') {
+                    redX = x;
+                    redY = y;
+                    squares[x][y] = '.';
+                } else if (squares[x][y] == 'B') {
+                    blueX = x;
+                    blueY = y;
+                    squares[x][y] = '.';
+                }
+            }
+        }
+
+        Queue<N13460Board> queue = new LinkedList<>();
+        queue.offer(new N13460Board(redX, redY, blueX, blueY, 0));
+        while (!queue.isEmpty()) {
+            N13460Board pop = queue.poll();
+//            System.out.println(pop);
+            if (pop.count >= 10) continue;
+
+            for (int[] ints : direction) {
+                int command = ints[0];
+                int dx = ints[1];
+                int dy = ints[2];
+
+                if (command == UP || command == DOWN) {
+                    if (pop.blueY == pop.redY) {
+                        if ((command == UP && pop.blueX < pop.redX) || (command == DOWN && pop.blueX > pop.redX)) {
+                            int[] bluePosition = move(pop.blueX, pop.blueY, dx, dy);
+                            int[] redPosition = moveWithOther(pop.redX, pop.redY, dx, dy, true, bluePosition[0]);
+                            if (bluePosition[0] == -1) {
+                                continue;
+                            } else if (redPosition[0] == -1) {
+                                System.out.println(pop.count + 1);
+                                System.exit(0);
+                            } else if (isSame(pop.blueX, pop.blueY, bluePosition) && isSame(pop.redX, pop.redY, redPosition)) {
+                                continue;
+                            }
+
+                            queue.offer(new N13460Board(redPosition[0], redPosition[1], bluePosition[0], bluePosition[1], pop.count + 1));
+                        } else {
+                            int[] redPosition = move(pop.redX, pop.redY, dx, dy);
+                            int[] bluePosition = moveWithOther(pop.blueX, pop.blueY, dx, dy, true, redPosition[0]);
+                            if (bluePosition[0] == -1) {
+                                continue;
+                            } else if (redPosition[0] == -1) {
+                                if (move(pop.blueX, pop.blueY, dx, dy)[0] == -1) {
+                                    continue;
+                                } else {
+                                    System.out.println(pop.count + 1);
+                                    System.exit(0);
+                                }
+                            } else if (isSame(pop.blueX, pop.blueY, bluePosition) && isSame(pop.redX, pop.redY, redPosition)) {
+                                continue;
+                            }
+
+                            queue.offer(new N13460Board(redPosition[0], redPosition[1], bluePosition[0], bluePosition[1], pop.count + 1));
+                        }
+                    } else {
+                        // 순서 상관 없이 움직이면 됨.
+                        int[] redPosition = move(pop.redX, pop.redY, dx, dy);
+                        int[] bluePosition = move(pop.blueX, pop.blueY, dx, dy);
+                        if (bluePosition[0] == -1) {
+                            continue;
+                        } else if (redPosition[0] == -1) {
+                            System.out.println(pop.count + 1);
+                            System.exit(0);
+                        } else if (isSame(pop.blueX, pop.blueY, bluePosition) && isSame(pop.redX, pop.redY, redPosition)) {
+                            continue;
+                        }
+
+                        queue.offer(new N13460Board(redPosition[0], redPosition[1], bluePosition[0], bluePosition[1], pop.count + 1));
+                    }
+                } else {
+                    if (pop.blueX == pop.redX) {
+                        if ((command == LEFT && pop.blueY < pop.redY) || (command == RIGHT && pop.blueY > pop.redY)) {
+                            int[] bluePosition = move(pop.blueX, pop.blueY, dx, dy);
+                            int[] redPosition = moveWithOther(pop.redX, pop.redY, dx, dy, false, bluePosition[1]);
+                            if (bluePosition[0] == -1) {
+                                continue;
+                            } else if (redPosition[0] == -1) {
+                                System.out.println(pop.count + 1);
+                                System.exit(0);
+                            } else if (isSame(pop.blueX, pop.blueY, bluePosition) && isSame(pop.redX, pop.redY, redPosition)) {
+                                continue;
+                            }
+
+                            queue.offer(new N13460Board(redPosition[0], redPosition[1], bluePosition[0], bluePosition[1], pop.count + 1));
+                        } else {
+                            int[] redPosition = move(pop.redX, pop.redY, dx, dy);
+                            int[] bluePosition = moveWithOther(pop.blueX, pop.blueY, dx, dy, false, redPosition[1]);
+                            if (bluePosition[0] == -1) {
+                                continue;
+                            } else if (redPosition[0] == -1) {
+                                if (move(pop.blueX, pop.blueY, dx, dy)[0] == -1) {
+                                    continue;
+                                } else {
+                                    System.out.println(pop.count + 1);
+                                    System.exit(0);
+                                }
+                            } else if (isSame(pop.blueX, pop.blueY, bluePosition) && isSame(pop.redX, pop.redY, redPosition)) {
+                                continue;
+                            }
+                            queue.offer(new N13460Board(redPosition[0], redPosition[1], bluePosition[0], bluePosition[1], pop.count + 1));
+                        }
+                    } else {
+                        // 순서 상관 없이 움직이면 됨.
+                        int[] redPosition = move(pop.redX, pop.redY, dx, dy);
+                        int[] bluePosition = move(pop.blueX, pop.blueY, dx, dy);
+
+                        if (bluePosition[0] == -1) {
+                            continue;
+                        } else if (redPosition[0] == -1) {
+                            System.out.println(pop.count + 1);
+                            System.exit(0);
+                        } else if (isSame(pop.blueX, pop.blueY, bluePosition) && isSame(pop.redX, pop.redY, redPosition)) {
+                            continue;
+                        }
+                        queue.offer(new N13460Board(redPosition[0], redPosition[1], bluePosition[0], bluePosition[1], pop.count + 1));
+                    }
+                }
+            }
+        }
+        System.out.println(-1);
+    }
+
+    private static boolean isSame(int x, int y, int[] newPosition) {
+        return x == newPosition[0] && y == newPosition[1];
+    }
+
+    private static int[] move(int x, int y, int dx, int dy) {
+        int newX = x;
+        int newY = y;
+        while (isIn(newX, newY) && squares[newX + dx][newY + dy] != '#') {
+            if (squares[newX][newY] == 'O') return new int[]{-1, -1};
+            newX += dx;
+            newY += dy;
+        }
+        if (squares[newX][newY] == 'O') {
+            return new int[]{-1, -1};
+        }
+        return new int[]{newX, newY};
+    }
+
+    private static int[] moveWithOther(int x, int y, int dx, int dy, boolean isX, int other) {
+        int newX = x;
+        int newY = y;
+        while (isIn(newX, newY) && squares[newX + dx][newY + dy] != '#' && ((isX && newX + dx != other) || (!isX && newY + dy != other))) {
+            newX += dx;
+            newY += dy;
+            if (squares[newX][newY] == 'O') return new int[]{-1, -1};
+        }
+        if (squares[newX][newY] == 'O') {
+            return new int[]{-1, -1};
+        }
+        return new int[]{newX, newY};
+    }
+
+    private static boolean isIn(int x, int y) {
+        return x >= 0 && y >= 0 && x < row && y < col;
+    }
+
+    private static void printSquares() {
+        for (int i = 0; i < row; i++) System.out.println(Arrays.toString(squares[i]));
+    }
+
+    static class N13460Board {
+        int redX;
+        int redY;
+        int blueX;
+        int blueY;
+        int count;
+
+        public N13460Board(int redX, int redY, int blueX, int blueY, int count) {
+            this.redX = redX;
+            this.redY = redY;
+            this.blueX = blueX;
+            this.blueY = blueY;
+            this.count = count;
+        }
+
+        @Override
+        public String toString() {
+            return "N13460Board{" +
+                    "redX=" + redX +
+                    ", redY=" + redY +
+                    ", blueX=" + blueX +
+                    ", blueY=" + blueY +
+                    ", count=" + count +
+                    '}';
+        }
+    }
+}
