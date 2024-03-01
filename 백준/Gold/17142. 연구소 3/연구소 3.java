@@ -98,14 +98,13 @@ public class Main {
     private static void combination(int index, int start) {
         if (index == M) {
             List<N17779Position> inActiveVirus = new ArrayList<>();
-//            System.out.println(Arrays.toString(array));
             inActiveVirus.addAll(virus);
 
             int[][] sumSquares = clone(virusSquares.get(array[0]));
             inActiveVirus.remove(virus.get(array[0]));
 
             for (int i = 1; i < index; i++) {
-                combineSquares(sumSquares, clone(virusSquares.get(array[i])));
+                combineSquares(sumSquares, virusSquares.get(array[i]));
                 inActiveVirus.remove(virus.get(array[i]));
             }
 
@@ -138,6 +137,15 @@ public class Main {
             this.x = x;
             this.y = y;
             this.time = time;
+        }
+
+        @Override
+        public String toString() {
+            return "N17779Position{" +
+                    "x=" + x +
+                    ", y=" + y +
+                    ", time=" + time +
+                    '}';
         }
     }
 }
