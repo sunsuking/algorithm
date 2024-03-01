@@ -1,10 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
     private static final int UP = 0;
@@ -12,7 +9,8 @@ public class Main {
     private static final int LEFT = 2;
     private static final int RIGHT = 3;
     private static final int[][] direction = {{UP, -1, 0}, {DOWN, 1, 0}, {LEFT, 0, -1}, {RIGHT, 0, 1}};
-    private static int row, col, holeX, holeY;
+    private static int row, col;
+    private static Set<N13460Board> set;
     private static char[][] squares;
 
     public static void main(String[] args) throws IOException {
@@ -21,15 +19,13 @@ public class Main {
         row = Integer.parseInt(st.nextToken());
         col = Integer.parseInt(st.nextToken());
         squares = new char[row][col];
+        set = new HashSet<>();
         int redX = 0, redY = 0, blueX = 0, blueY = 0;
         for (int x = 0; x < row; x++) {
             char[] chars = br.readLine().toCharArray();
             for (int y = 0; y < col; y++) {
                 squares[x][y] = chars[y];
-                if (squares[x][y] == 'O') {
-                    holeX = x;
-                    holeY = y;
-                } else if (squares[x][y] == 'R') {
+                if (squares[x][y] == 'R') {
                     redX = x;
                     redY = y;
                     squares[x][y] = '.';
@@ -45,6 +41,8 @@ public class Main {
         queue.offer(new N13460Board(redX, redY, blueX, blueY, 0));
         while (!queue.isEmpty()) {
             N13460Board pop = queue.poll();
+            if (set.contains(pop)) continue;
+            set.add(pop);
 //            System.out.println(pop);
             if (pop.count >= 10) continue;
 
@@ -210,14 +208,15 @@ public class Main {
         }
 
         @Override
-        public String toString() {
-            return "N13460Board{" +
-                    "redX=" + redX +
-                    ", redY=" + redY +
-                    ", blueX=" + blueX +
-                    ", blueY=" + blueY +
-                    ", count=" + count +
-                    '}';
+        public int hashCode() {
+            return Objects.hash(redX, redY, blueX, blueY);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            N13460Board other = (N13460Board) obj;
+            return this.redX == other.redX && this.redY == other.redY && this.blueX == other.blueX && this.blueY == other.blueY;
         }
     }
 }
