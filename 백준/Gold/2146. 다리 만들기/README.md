@@ -24,7 +24,7 @@
 
 <p>위의 그림에서 색이 있는 부분이 육지이고, 색이 없는 부분이 바다이다. 이 바다에 가장 짧은 다리를 놓아 두 대륙을 연결하고자 한다. 가장 짧은 다리란, 다리가 격자에서 차지하는 칸의 수가 가장 작은 다리를 말한다. 다음 그림에서 두 대륙을 연결하는 다리를 볼 수 있다.</p>
 
-<p style="text-align: center;"><img alt="" height="220" src="https://www.acmicpc.net/JudgeOnline/upload/201008/b2.PNG" width="247"></p>
+<p style="text-align: center;"><img alt="" height="220" src="" width="247"></p>
 
 <p>물론 위의 방법 외에도 다리를 놓는 방법이 여러 가지 있으나, 위의 경우가 놓는 다리의 길이가 3으로 가장 짧다(물론 길이가 3인 다른 다리를 놓을 수 있는 방법도 몇 가지 있다).</p>
 
