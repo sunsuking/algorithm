@@ -1,111 +1,69 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.LinkedList;
 
 public class Main {
+
+    static LinkedList<Integer>[] wheels;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder builder = new StringBuilder();
-        StringTokenizer st;
-        N4013Node[] nodes = new N4013Node[4];
+        String[] input;
+
+        wheels = new LinkedList[4];
+
         for (int i = 0; i < 4; i++) {
-            Deque<Boolean> queue = new LinkedList<>();
-            char[] chars = br.readLine().toCharArray();
-            for (int x = 0; x < 8; x++) {
-                queue.offer(chars[x] == '0');
+            wheels[i] = new LinkedList<>();
+            input = br.readLine().split("");
+            for (int j = 0; j < 8; j++) {
+                wheels[i].addLast(Integer.parseInt(input[j]));
             }
-            nodes[i] = new N4013Node(queue);
         }
+
+
         int K = Integer.parseInt(br.readLine());
+
         for (int i = 0; i < K; i++) {
-            st = new StringTokenizer(br.readLine());
-            int num = Integer.parseInt(st.nextToken()) - 1;
-            boolean isLeft = Integer.parseInt(st.nextToken()) == -1;
+            input = br.readLine().split(" ");
 
-            Queue<Integer> turnRight = new LinkedList<>();
-            Queue<Integer> turnLeft = new LinkedList<>();
+            int select = Integer.parseInt(input[0]) - 1;
+            int direct = Integer.parseInt(input[1]);
 
-            if (isLeft) {
-                turnLeft.offer(num);
-            } else {
-                turnRight.offer(num);
-            }
-
-            boolean turn = isLeft;
-            for (int s = num; s < 3; s++) {
-                if (nodes[s].rightNode() == nodes[s + 1].leftNode()) break;
-                turn = !turn;
-                if (turn) {
-                    turnLeft.offer(s + 1);
-                } else {
-                    turnRight.offer(s + 1);
-                }
-            }
-
-            turn = isLeft;
-            for (int e = num; e >= 1; e--) {
-                turn = !turn;
-                if (nodes[e].leftNode() == nodes[e - 1].rightNode()) break;
-                if (turn) {
-                    turnLeft.offer(e - 1);
-                } else {
-                    turnRight.offer(e - 1);
-                }
-            }
-
-            while (!turnLeft.isEmpty()) nodes[turnLeft.poll()].rotateLeft();
-            while (!turnRight.isEmpty()) nodes[turnRight.poll()].rotateRight();
+            spin(select, direct, ' ');
         }
-        int sum = 0;
-        for (int i = 0; i < 4; i++) {
-            sum += nodes[i].queue.getFirst() ? 0 : Math.pow(2, i);
+
+        int answer = 0 ;
+        int cnt = 1;
+        for (LinkedList w : wheels){
+            answer += cnt * (int) w.getFirst();
+            cnt *= 2;
         }
-        System.out.println(sum);
+
+        System.out.println(answer);
     }
 
-    static class N4013Node {
-        Deque<Boolean> queue;
+    static void spin(int idx, int spinDirct, char direct) {
 
-        public N4013Node(Deque<Boolean> queue) {
-            this.queue = queue;
+
+        // 오른쪽 확인
+        if (idx + 1 < 4 && wheels[idx].get(2) != wheels[idx + 1].get(6) && direct != 'L') {
+            spin(idx + 1, spinDirct * -1, 'R');
         }
 
-        void rotateRight() {
-            Deque<Boolean> temp = new ArrayDeque<>();
-            for (int i = 0; i < 7; i++) {
-                temp.offer(queue.pop());
-            }
-            for (int i = 0; i < 7; i++) {
-                queue.offer(temp.pop());
-            }
+
+        // 왼쪽 확인
+        if (idx - 1 >= 0 && wheels[idx].get(6) != wheels[idx - 1].get(2) && direct != 'R') {
+            spin(idx - 1, spinDirct * -1, 'L');
         }
 
-        void rotateLeft() {
-            boolean pop = queue.pop();
-            queue.offer(pop);
+
+        if (spinDirct == 1){
+            wheels[idx].addFirst(wheels[idx].pollLast());
+        } else {
+            wheels[idx].addLast(wheels[idx].pollFirst());
         }
 
-        boolean rightNode() {
-            int index = 0;
-            for (boolean isN : queue) {
-                if (index == 2) {
-                    return isN;
-                }
-                index++;
-            }
-            return false;
-        }
-
-        boolean leftNode() {
-            int index = 0;
-            for (boolean isN : queue) {
-                if (index == 6) {
-                    return isN;
-                }
-                index++;
-            }
-            return false;
-        }
     }
+
 }
