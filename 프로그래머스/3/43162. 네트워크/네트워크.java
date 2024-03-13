@@ -18,7 +18,7 @@ class Solution {
         
         Set<Integer> set = new HashSet<>();
         for (int i = 1; i <= n; i++) {
-            set.add(find(parent[i]));
+            set.add(find(i));
         }
         
         return set.size();
