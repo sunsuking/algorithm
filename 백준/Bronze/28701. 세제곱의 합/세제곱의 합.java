@@ -5,13 +5,9 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         int num = sc.nextInt();
         int sum = 0;
-        long sum2 = 0;
-        for (int i = 1; i <= num; i++) {
-            sum += i;
-            sum2 += (int) Math.pow(i, 3);
-        }
+        for (int i = 1; i <= num; i++) sum += i;
         System.out.println(sum);
         System.out.println((int) Math.pow(sum, 2));
-        System.out.println(sum2);
+        System.out.println((int) Math.pow(sum, 2));
     }
 }
