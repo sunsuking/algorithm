@@ -5,9 +5,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int num = Integer.parseInt(br.readLine());
+
         Queue<Integer> queue = new LinkedList<>();
         for (int i = 0; i < num; i++) {
             queue.offer(i + 1);
@@ -19,5 +20,6 @@ public class Main {
             queue.offer(pop);
         }
         System.out.println(queue.poll());
+
     }
 }
