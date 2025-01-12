@@ -35,10 +35,6 @@ public class Main {
 
             while (!pq.isEmpty()) {
                 Node pop = pq.poll();
-//                System.out.println("------------");
-//                System.out.println(pop);
-//                System.out.println(Arrays.toString(dp));
-//                System.out.println("------------");
 
                 if (pop.weight > dp[pop.n]) continue;
 
@@ -73,14 +69,6 @@ public class Main {
         public Node (int n, int weight) {
             this.n = n;
             this.weight = weight;
-        }
-
-        @Override
-        public String toString() {
-            return "Node{" +
-                    "n=" + n +
-                    ", weight=" + weight +
-                    '}';
         }
     }
 }
